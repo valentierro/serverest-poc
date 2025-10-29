@@ -1,5 +1,5 @@
-import { PaginaLogin } from './pages/PaginaLogin';
-import { PaginaCadastro } from './pages/PaginaCadastro';
+import { PaginaLogin } from '../pages/PaginaLogin';
+import { PaginaCadastro } from '../pages/PaginaCadastro';
 
 describe('Testes de Login de Usuário', () => {
   let paginaLogin: PaginaLogin;

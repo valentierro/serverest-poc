@@ -1,6 +1,6 @@
-import { PaginaCadastro } from './pages/PaginaCadastro';
-import { PaginaHome } from './pages/PaginaHome';
-import { PaginaListaCompras } from './pages/PaginaListaCompras';
+import { PaginaCadastro } from '../pages/PaginaCadastro';
+import { PaginaHome } from '../pages/PaginaHome';
+import { PaginaListaCompras } from '../pages/PaginaListaCompras';
 
 describe('Testes de Busca e Lista de Produtos', () => {
   let paginaCadastro: PaginaCadastro;

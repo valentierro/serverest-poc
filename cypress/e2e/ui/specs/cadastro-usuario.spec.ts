@@ -1,4 +1,4 @@
-import { PaginaCadastro } from './pages/PaginaCadastro';
+import { PaginaCadastro } from '../pages/PaginaCadastro';
 
 describe('Testes de Cadastro de Usuário', () => {
   let paginaCadastro: PaginaCadastro;

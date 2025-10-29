@@ -7,7 +7,8 @@ export class PaginaCadastro extends BasePage {
     campoSenha: 'input[name="password"]',
     checkboxAdministrador: 'input[name="administrador"]',
     botaoCadastrar: 'button[type="submit"]',
-    formulario: 'form'
+    formulario: 'form',
+    linkLogin: 'a[href*="login"]'
   };
 
   constructor() {
