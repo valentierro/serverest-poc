@@ -1,6 +1,6 @@
-# Cypress TypeScript POM Testing Framework
+# ServeRest POC - Cypress Testing Framework
 
-Um framework de testes Cypress construído com TypeScript e padrão Page Object Model (POM) para testes de UI e API, focado no Serverest.
+Um framework de testes Cypress construído com TypeScript e padrão Page Object Model (POM) para testes de UI e API, focado no Serverest (https://front.serverest.dev).
 
 ## 🚀 Funcionalidades
 
@@ -19,15 +19,15 @@ Um framework de testes Cypress construído com TypeScript e padrão Page Object 
 cypress-poc/
 ├── cypress/
 │   ├── e2e/
-│   │   ├── api/                 # Arquivos de testes API
-│   │   │   ├── usuarios.spec.ts
-│   │   │   ├── produtos.spec.ts
-│   │   │   └── carrinho.spec.ts
-│   │   └── ui/                  # Arquivos de testes UI
-│   │       ├── busca-lista-produtos.spec.ts
-│   │       ├── cadastro-usuario.spec.ts
-│   │       ├── login-usuario.spec.ts
-│   │       └── pages/           # Classes Page Object Model
+│   │   ├── api/                 # Testes de API Serverest
+│   │   │   ├── usuarios.spec.ts     # 5 testes (3 positivos, 2 negativos)
+│   │   │   ├── produtos.spec.ts     # 5 testes (3 positivos, 2 negativos)
+│   │   │   └── carrinho.spec.ts     # 5 testes (3 positivos, 2 negativos)
+│   │   └── ui/                  # Testes de UI Serverest
+│   │       ├── busca-lista-produtos.spec.ts  # Busca e lista de produtos
+│   │       ├── cadastro-usuario.spec.ts      # 3 testes (1 negativo, 2 positivos)
+│   │       ├── login-usuario.spec.ts         # 2 testes (1 positivo, 1 negativo)
+│   │       └── pages/           # Page Objects em português-BR
 │   │           ├── BasePage.ts
 │   │           ├── PaginaCadastro.ts
 │   │           ├── PaginaLogin.ts
@@ -37,68 +37,77 @@ cypress-poc/
 │   │   ├── commands.ts
 │   │   └── e2e.ts
 │   ├── utils/                   # Classes utilitárias
-│   │   └── ApiHelper.ts
-│   ├── configs/                 # Configurações de ambiente
-│   │   ├── index.ts
+│   │   └── ApiHelper.ts         # Helper para testes de API
+│   ├── configs/                 # Configurações multi-ambiente
+│   │   ├── index.ts             # Carregador de configurações
+│   │   ├── README.md            # Documentação das configurações
 │   │   ├── ui/                  # Configurações UI por ambiente
+│   │   │   ├── dev.config.ts
+│   │   │   ├── stg.config.ts
+│   │   │   └── prod.config.ts
 │   │   └── api/                 # Configurações API por ambiente
+│   │       ├── dev.config.ts
+│   │       ├── stg.config.ts
+│   │       └── prod.config.ts
 │   ├── downloads/              # Arquivos baixados
 │   ├── screenshots/            # Screenshots dos testes
 │   └── videos/                 # Vídeos dos testes
-├── cypress.config.ts           # Configuração Cypress
+├── cypress.config.ts           # Configuração principal Cypress
 ├── tsconfig.json              # Configuração TypeScript
 ├── package.json               # Dependências e scripts
+├── .gitignore                 # Arquivos ignorados pelo Git
 └── README.md                  # Este arquivo
 ```
 
-## 🛠️ Installation
+## 🛠️ Instalação
 
-1. **Clone or navigate to the project directory**
+1. **Clone o repositório**
    ```bash
-   cd cypress-poc
+   git clone https://github.com/valentierro/serverest-poc.git
+   cd serverest-poc
    ```
 
-2. **Install dependencies**
+2. **Instale as dependências**
    ```bash
    npm install
    ```
 
-3. **Open Cypress Test Runner**
+3. **Abra o Cypress Test Runner**
    ```bash
    npm run cypress:open
    ```
 
-## 🧪 Running Tests
+## 🧪 Executando Testes
 
-### Run All Tests
+### Executar Todos os Testes
 ```bash
 npm test
-# or
+# ou
 npm run cypress:run
 ```
 
-### Run UI Tests Only
+### Executar Apenas Testes UI
 ```bash
 npm run test:busca-lista       # Teste de Busca e Lista de Produtos
-npm run test:cadastro          # Teste de Cadastro de Usuário
-npm run test:login             # Teste de Login de Usuário
+npm run test:cadastro          # Teste de Cadastro de Usuário (3 testes)
+npm run test:login             # Teste de Login de Usuário (2 testes)
 ```
 
-### Run API Tests Only
+### Executar Apenas Testes API
 ```bash
-npm run test:api               # Todos os testes de API
-npm run test:api:usuarios      # Testes de usuários
-npm run test:api:produtos      # Testes de produtos
-npm run test:api:carrinho      # Testes de carrinho
+npm run test:api               # Todos os testes de API (15 testes)
+npm run test:api:usuarios      # Testes de usuários (5 testes)
+npm run test:api:produtos      # Testes de produtos (5 testes)
+npm run test:api:carrinho      # Testes de carrinho (5 testes)
 ```
 
-### Run All Tests
+### Executar Todos os Testes
 ```bash
 npm run test:todos             # Todos os testes (UI + API)
 npm run test:todos:headed      # Todos os testes em modo headed
 ```
 
-### Run Tests by Environment
+### Executar Testes por Ambiente
 ```bash
 # Desenvolvimento
 npm run test:dev               # Todos os testes em dev
@@ -116,198 +125,236 @@ npm run test:api:prod          # Testes de API em produção
 npm run test:ui:prod           # Testes de UI em produção
 ```
 
-### Run Tests in Specific Browser
+### Executar Testes em Navegador Específico
 ```bash
 npm run cypress:run:chrome
 npm run cypress:run:firefox
 npm run cypress:run:edge
 ```
 
-### Open Cypress Test Runner
+### Abrir Cypress Test Runner
 ```bash
 npm run test:open
-# or
+# ou
 npm run cypress:open
 ```
 
-## 📝 Writing Tests
+## 📝 Escrevendo Testes
 
 ### Page Object Model (POM)
 
-The framework uses the Page Object Model pattern for better maintainability:
+O framework utiliza o padrão Page Object Model para melhor manutenibilidade:
 
 ```typescript
-// pages/HomePage.ts
-export class HomePage extends BasePage {
+// pages/PaginaCadastro.ts
+export class PaginaCadastro extends BasePage {
   private readonly selectors = {
-    header: 'h1',
-    loginButton: '[data-testid="login-button"]'
+    campoNome: '[data-testid="nome"]',
+    campoEmail: '[data-testid="email"]',
+    campoPassword: '[data-testid="password"]',
+    botaoCadastrar: '[data-testid="cadastrar"]'
   };
 
-  clickLoginButton(): void {
-    this.clickElement(this.getElement(this.selectors.loginButton));
+  preencherFormulario(nome: string, email: string, senha: string): void {
+    this.preencherCampo(this.selectors.campoNome, nome);
+    this.preencherCampo(this.selectors.campoEmail, email);
+    this.preencherCampo(this.selectors.campoPassword, senha);
+  }
+
+  clicarCadastrar(): void {
+    this.clicarElemento(this.selectors.botaoCadastrar);
   }
 }
 
-// e2e/ui/home.spec.ts
-describe('Home Page Tests', () => {
-  let homePage: HomePage;
+// e2e/ui/cadastro-usuario.spec.ts
+describe('Testes de Cadastro de Usuário', () => {
+  let paginaCadastro: PaginaCadastro;
 
   beforeEach(() => {
-    homePage = new HomePage();
+    paginaCadastro = new PaginaCadastro();
+    cy.intercept('POST', '**/usuarios').as('cadastroRequest');
   });
 
-  it('should navigate to login page', () => {
-    homePage.visitHomePage();
-    homePage.clickLoginButton();
-    cy.url().should('include', '/login');
+  it('deve cadastrar usuário com sucesso', () => {
+    paginaCadastro.visitarPagina();
+    paginaCadastro.preencherFormulario('João Silva', 'joao@teste.com', '123456');
+    paginaCadastro.clicarCadastrar();
+    cy.wait('@cadastroRequest');
+    cy.contains('Cadastro realizado com sucesso').should('be.visible');
   });
 });
 ```
 
-### API Testing
+### Testes de API
 
-Use the ApiHelper class for API testing:
+Use a classe ApiHelper para testes de API:
 
 ```typescript
-// e2e/api/users.spec.ts
+// e2e/api/usuarios.spec.ts
 import { ApiHelper } from '../../utils/ApiHelper';
 
-describe('API Tests', () => {
+describe('Testes de API - Usuários', () => {
   let apiHelper: ApiHelper;
 
   before(() => {
     apiHelper = new ApiHelper();
   });
 
-  it('should fetch users', () => {
-    apiHelper.get('/users').then((response) => {
-      apiHelper.verifyStatusCode(response, 200);
-      apiHelper.verifyResponseIsArray(response);
+  it('deve criar um novo usuário com sucesso', () => {
+    const userData = {
+      nome: 'João Silva',
+      email: 'joao@teste.com',
+      password: '123456',
+      administrador: 'true'
+    };
+
+    apiHelper.post('/usuarios', userData).then((response) => {
+      apiHelper.verificarStatusCode(response, 201);
+      apiHelper.verificarPropriedade(response, 'message', 'Cadastro realizado com sucesso');
+      apiHelper.verificarPropriedade(response, '_id');
     });
   });
 });
 ```
 
-### Custom Commands
+### Comandos Customizados
 
-Use custom commands for common operations:
+Use comandos customizados para operações comuns:
 
 ```typescript
-// Custom commands available:
+// Comandos customizados disponíveis:
 cy.getByTestId('submit-button');
 cy.login('user@example.com', 'password123');
 cy.generateRandomEmail();
 cy.generateRandomString(10);
 ```
 
-## ⚙️ Configuration
+## ⚙️ Configuração
 
-### Cypress Configuration (`cypress.config.ts`)
+### Configuração Cypress (`cypress.config.ts`)
 
 ```typescript
+import { defineConfig } from 'cypress'
+import { getConfig } from './cypress/configs'
+
+const config = getConfig('ui'); // Default para configuração UI
+
 export default defineConfig({
   e2e: {
-    baseUrl: 'https://example.cypress.io',
-    viewportWidth: 1280,
-    viewportHeight: 720,
-    video: false,
-    screenshotOnRunFailure: true,
-    defaultCommandTimeout: 10000,
-    requestTimeout: 10000,
-    responseTimeout: 10000,
+    baseUrl: config.baseUrl,
+    viewportWidth: config.viewport?.width || 1280,
+    viewportHeight: config.viewport?.height || 720,
+    video: config.features.video,
+    screenshotOnRunFailure: config.features.screenshot,
+    defaultCommandTimeout: config.timeout.default,
+    requestTimeout: config.timeout.request,
+    responseTimeout: config.timeout.response,
+    specPattern: 'cypress/e2e/**/*.spec.{js,ts}',
     env: {
-      apiUrl: 'https://jsonplaceholder.typicode.com'
+      apiUrl: config.api?.baseUrl || 'https://serverest.dev',
+      environment: config.environment,
+      debug: config.features.debug
     }
   }
 });
 ```
 
-### TypeScript Configuration (`tsconfig.json`)
+### Configuração TypeScript (`tsconfig.json`)
 
-The project includes proper TypeScript configuration with:
-- Strict type checking
-- Cypress and Node.js type definitions
-- ES5 target for compatibility
+O projeto inclui configuração TypeScript adequada com:
+- Verificação de tipos rigorosa
+- Definições de tipos Cypress e Node.js
+- Target ES5 para compatibilidade
 
-## 🎯 Test Categories
+## 🎯 Categorias de Testes
 
-### UI Tests (`cypress/e2e/ui/`)
-- **Home Page Tests**: Navigation, responsiveness, performance
-- **Login Page Tests**: Form validation, authentication flow, accessibility
-- **Serverest Tests**: Real-world application testing with Serverest
+### Testes UI (`cypress/e2e/ui/`)
+- **Cadastro de Usuário**: Validação de formulário, fluxo de cadastro, casos negativos
+- **Login de Usuário**: Autenticação, validação de credenciais, casos de erro
+- **Busca e Lista de Produtos**: Busca de produtos, adição à lista de compras
 
-### API Tests (`cypress/e2e/api/`)
-- **Users API**: CRUD operations, error handling, performance
-- **Posts API**: Data validation, integration tests, security
+### Testes API (`cypress/e2e/api/`)
+- **Usuários API**: Operações CRUD, tratamento de erros, performance
+- **Produtos API**: Validação de dados, testes de integração, segurança
+- **Carrinho API**: Operações de carrinho, validação de dados
 
-### Serverest Integration
-The framework includes specific tests for the [Serverest application](https://front.serverest.dev/login):
-- **Login Page**: Form validation, user interactions, responsiveness
-- **Register Page**: User registration flow, form validation
-- **Real-world Testing**: Tests against a live application for realistic scenarios
+### Integração Serverest
+O framework inclui testes específicos para a aplicação [Serverest](https://front.serverest.dev/login):
+- **Página de Login**: Validação de formulário, interações do usuário, responsividade
+- **Página de Cadastro**: Fluxo de cadastro de usuário, validação de formulário
+- **Testes Realistas**: Testes contra aplicação real para cenários realistas
 
-## 🔧 Utilities
+## 🔧 Utilitários
 
-### BasePage Class
-- Common page interactions
-- Element selection methods
-- Assertion helpers
-- Screenshot capabilities
+### Classe BasePage
+- Interações comuns de página
+- Métodos de seleção de elementos
+- Helpers de asserção
+- Capacidades de screenshot
 
-### ApiHelper Class
-- HTTP method wrappers (GET, POST, PUT, PATCH, DELETE)
-- Response validation methods
-- Performance testing utilities
-- Header management
+### Classe ApiHelper
+- Wrappers de métodos HTTP (GET, POST, PUT, PATCH, DELETE)
+- Métodos de validação de resposta
+- Utilitários de teste de performance
+- Gerenciamento de headers
 
-### Custom Commands
-- `getByTestId()`: Select elements by data-testid
-- `login()`: Session-based login
-- `generateRandomEmail()`: Generate test emails
-- `generateRandomString()`: Generate random strings
+### Comandos Customizados
+- `getByTestId()`: Selecionar elementos por data-testid
+- `login()`: Login baseado em sessão
+- `generateRandomEmail()`: Gerar emails de teste
+- `generateRandomString()`: Gerar strings aleatórias
 
-## 📊 Best Practices
+## 📊 Boas Práticas
 
-1. **Use Page Object Model**: Keep page logic separate from test logic
-2. **Data-Driven Testing**: Use fixtures for test data
-3. **Custom Commands**: Create reusable commands for common operations
-4. **Type Safety**: Leverage TypeScript for better code quality
-5. **Test Organization**: Separate UI and API tests
-6. **Error Handling**: Implement proper error handling in tests
-7. **Performance Testing**: Include response time validations
-8. **Accessibility**: Test ARIA attributes and keyboard navigation
+1. **Use Page Object Model**: Mantenha a lógica de página separada da lógica de teste
+2. **Testes Orientados a Dados**: Use fixtures para dados de teste
+3. **Comandos Customizados**: Crie comandos reutilizáveis para operações comuns
+4. **Segurança de Tipos**: Aproveite o TypeScript para melhor qualidade de código
+5. **Organização de Testes**: Separe testes UI e API
+6. **Tratamento de Erros**: Implemente tratamento adequado de erros nos testes
+7. **Testes de Performance**: Inclua validações de tempo de resposta
+8. **Acessibilidade**: Teste atributos ARIA e navegação por teclado
+9. **Intercepts**: Use intercepts em vez de waits estáticos
+10. **Testes em Português-BR**: Mantenha consistência na linguagem dos testes
 
 ## 🐛 Debugging
 
-### View Test Results
-- Screenshots are saved in `cypress/screenshots/`
-- Videos are saved in `cypress/videos/` (if enabled)
-- Download files are saved in `cypress/downloads/`
+### Visualizar Resultados dos Testes
+- Screenshots são salvos em `cypress/screenshots/`
+- Vídeos são salvos em `cypress/videos/` (se habilitado)
+- Arquivos baixados são salvos em `cypress/downloads/`
 
-### Debug Mode
+### Modo Debug
 ```bash
-# Run specific test file
-npx cypress run --spec "cypress/e2e/ui/home.spec.ts"
+# Executar arquivo de teste específico
+npx cypress run --spec "cypress/e2e/ui/cadastro-usuario.spec.ts"
 
-# Run with debug output
+# Executar com saída de debug
 DEBUG=cypress:* npm run cypress:run
+
+# Executar em modo headed para visualizar
+npm run test:cadastro:headed
 ```
 
-## 📚 Additional Resources
+## 📚 Recursos Adicionais
 
-- [Cypress Documentation](https://docs.cypress.io/)
-- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
-- [Page Object Model Pattern](https://martinfowler.com/bliki/PageObject.html)
+- [Documentação Cypress](https://docs.cypress.io/)
+- [Documentação TypeScript](https://www.typescriptlang.org/docs/)
+- [Padrão Page Object Model](https://martinfowler.com/bliki/PageObject.html)
+- [Documentação Serverest API](https://serverest.dev/)
+- [Aplicação Serverest](https://front.serverest.dev/login)
 
-## 🤝 Contributing
+## 🤝 Contribuindo
 
-1. Follow the existing code structure
-2. Use TypeScript for all new files
-3. Add proper type definitions
-4. Include comprehensive test coverage
-5. Update documentation as needed
+1. Siga a estrutura de código existente
+2. Use TypeScript para todos os novos arquivos
+3. Adicione definições de tipos adequadas
+4. Inclua cobertura abrangente de testes
+5. Atualize a documentação conforme necessário
+6. Mantenha os testes em português brasileiro
+7. Use Page Object Model para novos testes UI
+8. Siga as boas práticas estabelecidas
 
-## 📄 License
+## 📄 Licença
 
-This project is licensed under the ISC License.
+Este projeto está licenciado sob a Licença ISC.
