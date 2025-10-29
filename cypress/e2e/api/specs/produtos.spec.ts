@@ -1,4 +1,4 @@
-import { ApiHelper } from '../../utils/ApiHelper';
+import { ApiHelper } from "../../../utils/ApiHelper";
 
 describe('Testes de API - Produtos', () => {
   describe('Operações de Produtos', () => {

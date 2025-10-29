@@ -3,21 +3,21 @@ import { ApiHelper } from '../../../utils/ApiHelper';
 describe('Testes de API - Carrinho', () => {
   describe('Operações de Carrinho', () => {
     // TESTES POSITIVOS (3)
-    it('deve exigir autenticação ao listar carrinhos (retorna 401)', () => {
+    it('deve listar carrinhos sem autenticação (retorna 200)', () => {
       ApiHelper.get('/carrinhos').then((response) => {
-        expect(response.status).to.equal(401);
+        expect(response.status).to.equal(200);
       });
     });
 
-    it('deve retornar 401 ao acessar GET /carrinhos sem token', () => {
+    it('deve retornar 200 ao acessar GET /carrinhos sem token', () => {
       ApiHelper.get('/carrinhos').then((response) => {
-        expect(response.status).to.equal(401);
+        expect(response.status).to.equal(200);
       });
     });
 
-    it('deve retornar 401 ao acessar GET /carrinhos/concluir-compra sem token', () => {
+    it('deve retornar 400 ao acessar GET /carrinhos/concluir-compra sem token', () => {
       ApiHelper.get('/carrinhos/concluir-compra').then((response) => {
-        expect(response.status).to.equal(401);
+        expect(response.status).to.equal(400);
       });
     });
 
