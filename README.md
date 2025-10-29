@@ -49,23 +49,20 @@ cypress-poc/
 
 2. **Executar testes**
    ```bash
-   # Todos os testes
-   npm run test:todos
+   # Todos os testes por ambiente
+   npm run test:todos:dev
+   npm run test:todos:stg
+   npm run test:todos:prod
    
-   # Apenas UI
-   npm run test:cadastro
-   npm run test:login
-   npm run test:busca-lista
+   # Todos testes de UI por ambiente
+   npm run test:ui:dev
+   npm run test:ui:stg
+   npm run test:ui:prod
    
-   # Apenas API
-   npm run test:api:usuarios
-   npm run test:api:produtos
-   npm run test:api:carrinho
-   
-   # Por ambiente
-   npm run test:dev
-   npm run test:stg
-   npm run test:prod
+   # Todos testes de API por ambiente
+   npm run test:api:dev
+   npm run test:api:stg
+   npm run test:api:prod
    ```
 
 3. **Abrir Cypress**
