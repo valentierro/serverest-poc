@@ -5,7 +5,15 @@ describe('Testes de API - Usuários', () => {
   let userData: any;
 
   beforeEach(() => {
-    userData = ApiHelper.gerarDadosUsuario();
+    // Gerar dados aleatórios usando Faker
+    cy.generateRandomUser().then((randomUser) => {
+      userData = {
+        nome: randomUser.nome,
+        email: randomUser.email,
+        password: randomUser.password,
+        administrador: 'true'
+      };
+    });
   });
 
   describe('CRUD de Usuários', () => {

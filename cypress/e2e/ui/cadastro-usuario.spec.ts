@@ -34,51 +34,49 @@ describe('Testes de Cadastro de Usuário', () => {
     });
 
     it('deve permitir cadastrar usuário comum com sucesso (teste positivo)', () => {
-      const nomeUsuario = 'Usuario Comum ' + Date.now();
-      const emailUsuario = `usuario.comum.${Date.now()}@exemplo.com`;
-      const senhaUsuario = 'senha123456';
+      // Gerar dados aleatórios usando Faker
+      cy.generateRandomUser().then((userData) => {
+        // Interceptar requisições
+        cy.intercept('POST', '**/usuarios').as('cadastroRequest');
+        cy.intercept('POST', '**/login').as('loginRequest');
 
-      // Interceptar requisições
-      cy.intercept('POST', '**/usuarios').as('cadastroRequest');
-      cy.intercept('POST', '**/login').as('loginRequest');
+        paginaCadastro.visitarPaginaCadastro();
+        paginaCadastro.verificarPaginaCarregou();
 
-      paginaCadastro.visitarPaginaCadastro();
-      paginaCadastro.verificarPaginaCarregou();
+        // Realizar cadastro completo com dados aleatórios
+        paginaCadastro.realizarCadastro(userData.nome, userData.email, userData.password);
 
-      // Realizar cadastro completo
-      paginaCadastro.realizarCadastro(nomeUsuario, emailUsuario, senhaUsuario);
+        // Aguardar requisição de cadastro
+        cy.wait('@cadastroRequest', { timeout: 10000 });
 
-      // Aguardar requisição de cadastro
-      cy.wait('@cadastroRequest', { timeout: 10000 });
-
-      // Verificar redirecionamento (cadastro bem-sucedido)
-      paginaCadastro.verificarRedirecionamentoPosCadastro();
+        // Verificar redirecionamento (cadastro bem-sucedido)
+        paginaCadastro.verificarRedirecionamentoPosCadastro();
+      });
     });
 
     it('deve permitir cadastrar usuário administrador com sucesso (teste positivo)', () => {
-      const nomeUsuario = 'Admin ' + Date.now();
-      const emailUsuario = `admin.${Date.now()}@exemplo.com`;
-      const senhaUsuario = 'senhaAdmin123';
+      // Gerar dados aleatórios usando Faker
+      cy.generateRandomUser().then((userData) => {
+        // Interceptar requisições
+        cy.intercept('POST', '**/usuarios').as('cadastroRequest');
+        cy.intercept('POST', '**/login').as('loginRequest');
 
-      // Interceptar requisições
-      cy.intercept('POST', '**/usuarios').as('cadastroRequest');
-      cy.intercept('POST', '**/login').as('loginRequest');
+        paginaCadastro.visitarPaginaCadastro();
+        paginaCadastro.verificarPaginaCarregou();
 
-      paginaCadastro.visitarPaginaCadastro();
-      paginaCadastro.verificarPaginaCarregou();
+        // Realizar cadastro como administrador com dados aleatórios
+        paginaCadastro.realizarCadastro(userData.nome, userData.email, userData.password, true);
 
-      // Realizar cadastro como administrador
-      paginaCadastro.realizarCadastro(nomeUsuario, emailUsuario, senhaUsuario, true);
+        // Aguardar requisição de cadastro
+        cy.wait('@cadastroRequest', { timeout: 10000 });
 
-      // Aguardar requisição de cadastro
-      cy.wait('@cadastroRequest', { timeout: 10000 });
+        // Verificar redirecionamento (cadastro bem-sucedido)
+        paginaCadastro.verificarRedirecionamentoPosCadastro();
 
-      // Verificar redirecionamento (cadastro bem-sucedido)
-      paginaCadastro.verificarRedirecionamentoPosCadastro();
-
-      // Verificar redirecionamento (cadastro de admin bem-sucedido)
-      cy.url().should('satisfy', (url) => {
-        return url.includes('/home') || url.includes('/produtos') || url.includes('/minhaListaDeProdutos') || url.includes('/login');
+        // Verificar redirecionamento (cadastro de admin bem-sucedido)
+        cy.url().should('satisfy', (url) => {
+          return url.includes('/home') || url.includes('/produtos') || url.includes('/minhaListaDeProdutos') || url.includes('/login');
+        });
       });
     });
   });

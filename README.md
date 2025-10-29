@@ -9,6 +9,7 @@ POC simples de testes automatizados com Cypress + TypeScript para a aplicação 
 - **Page Object Model**: Código organizado e reutilizável
 - **Multi-ambiente**: Dev, staging e produção
 - **Português-BR**: Todos os testes em português brasileiro
+- **Dados Aleatórios**: Uso do Faker para gerar dados de teste
 
 ## 📁 Estrutura
 
@@ -103,10 +104,13 @@ describe('Cadastro de Usuário', () => {
   });
 
   it('deve cadastrar usuário com sucesso', () => {
-    paginaCadastro.visitarPagina();
-    paginaCadastro.preencherFormulario('João Silva', 'joao@teste.com');
-    paginaCadastro.clicarCadastrar();
-    cy.contains('Cadastro realizado com sucesso').should('be.visible');
+    // Gerar dados aleatórios com Faker
+    cy.generateRandomUser().then((userData) => {
+      paginaCadastro.visitarPagina();
+      paginaCadastro.preencherFormulario(userData.nome, userData.email);
+      paginaCadastro.clicarCadastrar();
+      cy.contains('Cadastro realizado com sucesso').should('be.visible');
+    });
   });
 });
 ```
@@ -124,15 +128,19 @@ describe('API Usuários', () => {
   });
 
   it('deve criar usuário com sucesso', () => {
-    const userData = {
-      nome: 'João Silva',
-      email: 'joao@teste.com',
-      password: '123456'
-    };
+    // Gerar dados aleatórios com Faker
+    cy.generateRandomUser().then((userData) => {
+      const userPayload = {
+        nome: userData.nome,
+        email: userData.email,
+        password: userData.password,
+        administrador: 'true'
+      };
 
-    apiHelper.post('/usuarios', userData).then((response) => {
-      apiHelper.verificarStatusCode(response, 201);
-      apiHelper.verificarPropriedade(response, 'message', 'Cadastro realizado com sucesso');
+      apiHelper.post('/usuarios', userPayload).then((response) => {
+        apiHelper.verificarStatusCode(response, 201);
+        apiHelper.verificarPropriedade(response, 'message', 'Cadastro realizado com sucesso');
+      });
     });
   });
 });
@@ -165,11 +173,11 @@ As configurações ficam em `cypress/configs/` e incluem:
 
 ## 🔧 Boas práticas
 
-1. **Use Page Object Model** - Mantenha lógica de página separada
+1. **Use Page Object Model** - Lógica de página separada
 2. **Intercepts** - Use `cy.intercept()` em vez de `cy.wait()`
-3. **Português-BR** - Mantenha testes em português brasileiro
-4. **TypeScript** - Use tipos para melhor qualidade
-5. **Organização** - Separe testes UI e API
+3. **TypeScript** - Linguagem fortemente tipada
+4. **Dados Aleatórios** - Use Faker para gerar dados únicos
+5. **Comandos Customizados** - Use `cy.generateRandomUser()` para dados de teste
 
 ## 🐛 Debug
 

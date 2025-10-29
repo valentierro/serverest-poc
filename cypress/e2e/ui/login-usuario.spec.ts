@@ -5,38 +5,45 @@ describe('Testes de Login de Usuário', () => {
   let paginaLogin: PaginaLogin;
   let paginaCadastro: PaginaCadastro;
   
-  // Dados do usuário criado uma única vez
-  const nomeUsuario = 'Usuario Login Test';
-  const emailUsuario = `usuario.login.${Date.now()}@exemplo.com`;
-  const senhaUsuario = 'senhaLogin123';
+  // Variáveis para armazenar dados do usuário criado
+  let nomeUsuario: string;
+  let emailUsuario: string;
+  let senhaUsuario: string;
 
   before(() => {
-    // Criar usuário apenas uma vez para todo o spec
-    paginaCadastro = new PaginaCadastro();
-    paginaCadastro.visitarPaginaCadastro();
-    paginaCadastro.realizarCadastro(nomeUsuario, emailUsuario, senhaUsuario);
-    
-    // Aguardar mensagem de sucesso do cadastro
-    cy.get('body').then(($body) => {
-      const successMessage = $body.find('.alert-success, .success, [class*="success"]');
-      if (successMessage.length > 0) {
-        cy.log('✅ Usuário criado com sucesso');
-        cy.wrap(successMessage).should('be.visible');
-      }
-    });
-    
-    // Aguardar login automático após cadastro
-    cy.wait(3000);
-    
-    // Verificar se foi redirecionado automaticamente
-    cy.url().then((currentUrl) => {
-      if (currentUrl.includes('/login')) {
-        // Fazer login manual se necessário
-        cy.get('input[name="email"]').type(emailUsuario);
-        cy.get('input[name="password"]').type(senhaUsuario);
-        cy.get('button[type="submit"]').click();
-        cy.wait(3000);
-      }
+    // Gerar dados aleatórios usando Faker
+    cy.generateRandomUser().then((userData) => {
+      nomeUsuario = userData.nome;
+      emailUsuario = userData.email;
+      senhaUsuario = userData.password;
+      
+      // Criar usuário apenas uma vez para todo o spec
+      paginaCadastro = new PaginaCadastro();
+      paginaCadastro.visitarPaginaCadastro();
+      paginaCadastro.realizarCadastro(nomeUsuario, emailUsuario, senhaUsuario);
+      
+      // Aguardar mensagem de sucesso do cadastro
+      cy.get('body').then(($body) => {
+        const successMessage = $body.find('.alert-success, .success, [class*="success"]');
+        if (successMessage.length > 0) {
+          cy.log('✅ Usuário criado com sucesso');
+          cy.wrap(successMessage).should('be.visible');
+        }
+      });
+      
+      // Aguardar login automático após cadastro
+      cy.wait(3000);
+      
+      // Verificar se foi redirecionado automaticamente
+      cy.url().then((currentUrl) => {
+        if (currentUrl.includes('/login')) {
+          // Fazer login manual se necessário
+          cy.get('input[name="email"]').type(emailUsuario);
+          cy.get('input[name="password"]').type(senhaUsuario);
+          cy.get('button[type="submit"]').click();
+          cy.wait(3000);
+        }
+      });
     });
   });
 
