@@ -1,39 +1,23 @@
-import { ApiHelper } from '../../utils/ApiHelper';
+import { ApiHelper } from '../../../utils/ApiHelper';
 
 describe('Testes de API - Carrinho', () => {
   describe('Operações de Carrinho', () => {
     // TESTES POSITIVOS (3)
-    it('deve validar estrutura de resposta da API (teste positivo)', () => {
-      // Testar GET que pode retornar 200 com dados vazios
+    it('deve exigir autenticação ao listar carrinhos (retorna 401)', () => {
       ApiHelper.get('/carrinhos').then((response) => {
-        expect(response.status).to.be.oneOf([200, 401]);
-        if (response.status === 200) {
-          expect(response.body).to.have.property('quantidade');
-          cy.log('✅ API de carrinho retorna dados válidos');
-        } else {
-          expect(response.body).to.have.property('message');
-          cy.log('✅ API de carrinho protegida por autenticação');
-        }
+        expect(response.status).to.equal(401);
       });
     });
 
-    it('deve validar métodos HTTP suportados (teste positivo)', () => {
-      // Testar GET que é suportado
+    it('deve retornar 401 ao acessar GET /carrinhos sem token', () => {
       ApiHelper.get('/carrinhos').then((response) => {
-        expect(response.status).to.be.oneOf([200, 401]);
-        cy.log('✅ Método GET suportado para carrinho');
+        expect(response.status).to.equal(401);
       });
     });
 
-    it('deve validar diferentes endpoints de carrinho (teste positivo)', () => {
-      // Testar endpoints que podem retornar diferentes status
-      const endpoints = ['/carrinhos/concluir-compra'];
-      
-      endpoints.forEach(endpoint => {
-        ApiHelper.get(endpoint).then((response) => {
-          expect(response.status).to.be.oneOf([200, 400, 401, 404]);
-          cy.log(`✅ Endpoint ${endpoint} responde com status ${response.status}`);
-        });
+    it('deve retornar 401 ao acessar GET /carrinhos/concluir-compra sem token', () => {
+      ApiHelper.get('/carrinhos/concluir-compra').then((response) => {
+        expect(response.status).to.equal(401);
       });
     });
 
@@ -46,16 +30,15 @@ describe('Testes de API - Carrinho', () => {
       });
     });
 
-    it('deve validar métodos HTTP não permitidos (teste negativo)', () => {
-      // Testar PUT e DELETE que retornam 405
+    it('deve retornar 405 ao tentar PUT em /carrinhos/ID', () => {
       ApiHelper.put('/carrinhos/123', {}).then((response) => {
         expect(response.status).to.equal(405);
-        cy.log('✅ Método PUT não permitido para carrinho');
       });
+    });
 
+    it('deve retornar 405 ao tentar DELETE em /carrinhos/ID', () => {
       ApiHelper.delete('/carrinhos/123').then((response) => {
         expect(response.status).to.equal(405);
-        cy.log('✅ Método DELETE não permitido para carrinho');
       });
     });
   });

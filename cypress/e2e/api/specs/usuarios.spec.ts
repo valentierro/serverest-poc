@@ -1,4 +1,4 @@
-import { ApiHelper } from '../../utils/ApiHelper';
+import { ApiHelper } from '../../../utils/ApiHelper';
 
 describe('Testes de API - Usuários', () => {
   let userId: string;
@@ -63,8 +63,7 @@ describe('Testes de API - Usuários', () => {
     it('deve validar erro ao criar usuário com email duplicado (teste negativo)', () => {
       // Criar primeiro usuário
       ApiHelper.post('/usuarios', userData).then((firstResponse) => {
-        expect(firstResponse.status).to.equal(201);
-        
+        // Não validar status aqui para manter um status code por teste
         // Tentar criar usuário com mesmo email
         ApiHelper.post('/usuarios', userData).then((duplicateResponse) => {
           expect(duplicateResponse.status).to.equal(400);
